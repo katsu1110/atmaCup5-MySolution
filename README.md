@@ -19,7 +19,7 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 ## Usage
 
 - このrepositoryをcloneしてくる
-- ```input, output```フォルダを```code```と同じdirectory上へ作る
+- ```input, output```フォルダが```code```と同じdirectory上にあることを確認
 
 ```
 .
