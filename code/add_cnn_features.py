@@ -36,6 +36,7 @@ def read_data():
     # load
     train = pd.read_csv(input_path + "train.csv")
     y_train = train['target'].values
+    submission = pd.read_csv(input_path + "atmaCup5__sample_submission.csv")
 
     # waves
     tr_waves = np.load(output_path + "tr_wave.npy")
@@ -48,8 +49,8 @@ def read_data():
     for i in range(ts_waves.shape[0]):
         ts_waves[i, :] = ts_waves[i, :] / np.std(ts_waves[i, :])
 
-    return tr_waves, ts_waves, y_train
-X_train, X_test, y_train = read_data()
+    return submission, tr_waves, ts_waves, y_train
+sub, X_train, X_test, y_train = read_data()
 orig_trlen = X_train.shape[0]
 
 ## augmentation
@@ -170,7 +171,7 @@ model.summary()
 k = 5
 skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=116)
 oof = np.zeros(X_train.shape[0])
-test_ = np.zeros(X_test.shape[0])
+test_ = np.ones(X_test.shape[0])
 cv = 0
 cnn_features_tr = np.zeros((X_train.shape[0], 2))
 cnn_features_ts = np.zeros((X_test.shape[0], 2))
@@ -216,14 +217,24 @@ for train_idx, test_idx in skf.split(X_train, y_train[:,0]):
 
     ## predict
     oof[test_idx] = model.predict(X_skf_test)[:,0]    
-    test_ += model.predict(X_test)[:,0]
+    test_ *= model.predict(X_test)[:,0]
 
     # 後処理
     print("pr-auc: {}".format(metrics.average_precision_score(y_skf_test[:,0], oof[test_idx])))
     cv += 1
     print("#"*50)
 
+### CV ###
+prauc = metrics.average_precision_score(y_train[:orig_trlen], oof[:orig_trlen])
+ll = metrics.log_loss(y_train[:orig_trlen], oof[:orig_trlen])
+lr_precision, lr_recall, _ = metrics.precision_recall_curve(y_train[:orig_trlen], oof[:orig_trlen])
+print(f"Overall PR-AUC = {prauc}, LogLoss = {ll}")
+print(metrics.classification_report(y_true=y_train[:orig_trlen], y_pred=np.round(oof[:orig_trlen])))
+
 ### save CNN features ###
+sub["target"] = test_ ** (1 / k)
+sub.to_csv(output_path + 'submission_cnn.csv', index=False)
+print("submitted!")
 np.save(output_path + "cnn_features_tr", cnn_features_tr)
 np.save(output_path + "cnn_features_ts", cnn_features_ts)
 print("cnn featuers saved!")
