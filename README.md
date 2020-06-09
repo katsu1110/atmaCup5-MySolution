@@ -3,8 +3,19 @@
 ## Usage
 
 - このrepositoryをcloneしてくる
+- ```input, output, figs```フォルダを```code```と同じdirectory上へ作る
+
+```
+.
+├── code
+├── output
+├── input
+└── figs
+
+```
+
 - atmaCup 5のデータをinputフォルダへ
-- ```run_all.sh```を実行（outputフォルダに、```submission_med.csv```など結果が保存される）
+- ```run_all.sh```を実行（outputフォルダに、```submission_med.csv```など結果が保存され、```figs```に```feature_importance```などの図が保存される）
 
 ## 実行環境
 
