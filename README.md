@@ -1,23 +1,39 @@
 # My Solution to atmaCup 5 (private 2nd, public 5th)
+夢中でやっていました。運営のみなさま、楽しい時間を過ごさせていただき、ありがとうございました！
+
+## Solution Summary
+GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
+
+- Conv1Dの中間層の出力特徴量
+- 信号の微分特徴量
+- 信号のFFT特徴量
+
+が特に効いていました。
+
+- undersampling + bagging
+- seed average
+- class weight設定
+
+といった、不均衡データへの対策を特に意識してモデリングしていました。
 
 ## Usage
 
 - このrepositoryをcloneしてくる
-- ```input, output, figs```フォルダを```code```と同じdirectory上へ作る
+- ```input, output```フォルダを```code```と同じdirectory上へ作る
 
 ```
 .
 ├── code
 ├── output
-├── input
-└── figs
+└── input
 
 ```
 
 - atmaCup 5のデータをinputフォルダへ
-- ```run_all.sh```を実行（outputフォルダに、```submission_med.csv```など結果が保存され、```figs```に```feature_importance```などの図が保存される）
+- ```run_all.sh```を実行（outputフォルダに、```submission_med.csv```など結果が保存される）
 
 ## 実行環境
+Anacondaに、lightGBM, XGBoost, CatBoost, Tensorflow (2.1.0), tensorflow-addons (0.9.1)を追加して使っています。
 
 ### python & conda version
 
