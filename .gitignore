@@ -8,3 +8,4 @@ catboost_info/
 *.csv
 *.pkl
 wheels/
+.env

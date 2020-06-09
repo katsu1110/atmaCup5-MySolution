@@ -1,0 +1,13 @@
+version: '2.3'
+services: 
+  conda:
+    build: .
+    image: katsu-atmacup-5
+    container_name: katsu-atmacup-5-conda
+    tty: true
+    command: /bin/bash
+    volumes: 
+      - ./:/analysis
+      - ${INPUT_DIR}:/analysis/input
+      - ${OUTPUT_DIR}:/analysis/output
+    env_file: .env

@@ -1,0 +1,7 @@
+lightgbm==2.3.0
+# version? とりあえず入れば行ける気がする
+xgboost
+catboost==0.23
+tensorflow==2.1.0
+tensorflow-addons==0.9.1
+umap-learn==0.4.4

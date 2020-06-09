@@ -42,6 +42,32 @@ Python 3.7.6
 conda 4.8.3
 ```
 
+### Docker
+
+Docker で実行する場合の手順です。ローカル環境には docker / docker-compose をインストールしてください。
+
+```bash
+cp project.env .env #  step1: .env に環境変数ファイルをコピー
+nano .env #  step2: 必要があれば編集
+
+docker-compose up -d --build  # step3: image を build してコンテナ立ち上げ
+```
+
+`.env` で以下の設定が行えます
+
+- INPUT_DIR: 入力になるデータのディレクトリです。
+- OUTPUT_DIR: 作成されたモデル、特徴量などが保存されるディレクトリです
+
+スクリプトを実行する場合には docker container 内部で実行します
+
+```bash
+➜ docker exec -it katsu-atmacup-5-conda bash
+(base) root@0f8f3ab4a6a1:/analysis# python -V
+Python 3.7.6
+(base) root@0f8f3ab4a6a1:/analysis# conda -V
+conda 4.8.2
+```
+
 ### modules
 
 ```
