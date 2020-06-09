@@ -33,7 +33,16 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 - ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med.csv```など結果が保存される）
 
 ## 実行環境
-Anacondaに、lightGBM, XGBoost, CatBoost, Tensorflow (2.1.0), tensorflow-addons (0.9.1)を追加して使っています。
+Anacondaに、
+
+- lightGBM (lightgbm==2.3.0)
+- XGBoost (xgboost==1.0.2)
+- CatBoost (catboost==0.23)
+- Tensorflow (tensorflow==2.1.0)
+- tensorflow-addons (tensorflow-addons==0.9.1)
+- UMAP (umap-learn==0.4.4) 
+
+を追加して使っています。
 
 ### python & conda version
 

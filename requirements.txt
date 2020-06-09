@@ -1,6 +1,5 @@
 lightgbm==2.3.0
-# version? とりあえず入れば行ける気がする
-xgboost
+xgboost==1.0.2
 catboost==0.23
 tensorflow==2.1.0
 tensorflow-addons==0.9.1
