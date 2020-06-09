@@ -14,7 +14,7 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 - seed average
 - class weight設定
 
-といった、不均衡データへの対策を特に意識してモデリングしていました。
+といった、不均衡データへの対策を特に意識してモデリングしていました。最後にpseudolabelによってスコアを底上げしました。
 
 ## Usage
 
@@ -30,7 +30,7 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 ```
 
 - atmaCup 5のデータをinputフォルダへ
-- ```run_all.sh```を実行（outputフォルダに、```submission_med.csv```など結果が保存される）
+- ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med.csv```など結果が保存される）
 
 ## 実行環境
 Anacondaに、lightGBM, XGBoost, CatBoost, Tensorflow (2.1.0), tensorflow-addons (0.9.1)を追加して使っています。
