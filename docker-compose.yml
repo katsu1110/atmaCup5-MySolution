@@ -8,5 +8,6 @@ services:
     command: /bin/bash
     volumes: 
       - ./:/analysis
-      - ${DATA_DIR}:/analysis/input
+      - ${INPUT_DIR}:/analysis/input
+      - ${OUTPUT_DIR}:/analysis/output
     env_file: .env
