@@ -7,7 +7,7 @@ get CNN features
 """
 
 ### Tricks ###
-FLIP = False
+FLIP = True
 
 ### Libraries ###
 import numpy as np
@@ -18,6 +18,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn import metrics
 import math
 
+import tensorflow_addons as tfa
 import tensorflow as tf
 from tensorflow.keras import backend as K
 from tensorflow.keras import callbacks
@@ -42,12 +43,12 @@ def read_data():
     tr_waves = np.load(output_path + "tr_wave.npy")
     ts_waves = np.load(output_path + "ts_wave.npy")
 
-    # sample-wise normalize
-    for i in range(tr_waves.shape[0]):
-        tr_waves[i, :] = tr_waves[i, :] / np.std(tr_waves[i, :])
+    # # sample-wise normalize
+    # for i in range(tr_waves.shape[0]):
+    #     tr_waves[i, :] = tr_waves[i, :] / np.std(tr_waves[i, :])
     
-    for i in range(ts_waves.shape[0]):
-        ts_waves[i, :] = ts_waves[i, :] / np.std(ts_waves[i, :])
+    # for i in range(ts_waves.shape[0]):
+    #     ts_waves[i, :] = ts_waves[i, :] / np.std(ts_waves[i, :])
 
     return submission, tr_waves, ts_waves, y_train
 sub, X_train, X_test, y_train = read_data()
@@ -169,13 +170,13 @@ model.summary()
 
 ### Fitting ###
 k = 5
-skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=116)
+skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=72)
 oof = np.zeros(X_train.shape[0])
 test_ = np.ones(X_test.shape[0])
 cv = 0
 cnn_features_tr = np.zeros((X_train.shape[0], 2))
 cnn_features_ts = np.zeros((X_test.shape[0], 2))
-weights = {0:4, 1:100}
+weights = {0:5, 1:100}
 
 for train_idx, test_idx in skf.split(X_train, y_train[:,0]):
 
@@ -192,7 +193,8 @@ for train_idx, test_idx in skf.split(X_train, y_train[:,0]):
 
     # compile
     loss = "binary_crossentropy"
-    opt = optimizers.Adam(lr=params['optimizer']['lr'])
+    opt = tfa.optimizers.RectifiedAdam(lr=params['optimizer']['lr'])
+    opt = tfa.optimizers.SWA(opt)
     model.compile(loss=loss, optimizer=opt)
 
     # callbacks
