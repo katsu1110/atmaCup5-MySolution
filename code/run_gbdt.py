@@ -37,9 +37,9 @@ PSEUDO = int(sys.argv[2])
 UNDERSAMPLING_BAGGING = True
 GEOMEAN = True
 
-PSEUDO_THRESHOLD = 0.95
+PSEUDO_THRESHOLD = 0.99
 N_BAG = 10
-N_UNDER = 9
+N_UNDER = 16
 
 ### data location ###
 input_path = "../input/"
@@ -143,7 +143,7 @@ lls = np.zeros(len_s)
 for i, s in enumerate(seeds):
     model = RunModel(train, test, target, features, categoricals=categoricals,
                 model=GBDT, task="binary", n_splits=5, cv_method="StratifiedKFold", 
-                group=group, seed=s, scaler=None)
+                group=group, seed=s, scaler=None, pseudo=PSEUDO)
     if GEOMEAN:
         oof *= model.oof
         y_preds *= model.y_pred

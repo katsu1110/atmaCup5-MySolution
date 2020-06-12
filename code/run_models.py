@@ -27,7 +27,7 @@ from catb_param_models import catb_model
 UNDERSAMPLING_BAGGING = True
 GEOMEAN = True
 N_BAG = 10
-N_UNDER = 9
+N_UNDER = 16
 
 class RunModel(object):
     """
@@ -64,7 +64,7 @@ class RunModel(object):
 
     def __init__(self, train_df : pd.DataFrame, test_df : pd.DataFrame, target : str, features : List, categoricals: List=[],
                 model : str="lgb", task : str="regression", n_splits : int=4, cv_method : str="KFold", 
-                group : str=None, parameter_tuning=False, seed : int=1220, scaler : str=None, verbose=True):
+                group : str=None, parameter_tuning=False, seed : int=1220, scaler : str=None, pseudo : int=0, verbose=True):
 
         # display info
         print("##############################")
@@ -97,6 +97,7 @@ class RunModel(object):
         self.parameter_tuning = parameter_tuning
         self.seed = seed
         self.scaler = scaler
+        self.pseudo = pseudo
         self.verbose = verbose
         self.cv = self.get_cv()
         self.y_pred, self.score, self.model, self.oof, self.y_val, self.fi_df = self.fit()

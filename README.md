@@ -41,9 +41,8 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 
 - UMAP特徴量を作る際のseedを固定していなかった
 - Keras CNNの訓練時にseedを固定していなかった
-- 締め切りに間にあわせるため、pseudolabel後のGBDTの訓練だけXGBoost, CatBoostのlearning rateを上げて行なった
 
-ことにより、このrepositoryのコードを動かしても完全には上記のスコアには一致しません...ご留意ください（かなり近いスコアにはなるはずです）。
+ことにより、このrepositoryのコードを動かしても完全には上記のスコアには一致しません...ご留意ください（近いスコアにはなるはずです）。
 
 ## 実行環境
 Anaconda (https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh)に、

@@ -15,7 +15,7 @@ def xgb_model(cls, train_set, val_set):
     # list is here: https://xgboost.readthedocs.io/en/latest/parameter.html
     params = {
         'colsample_bytree': 0.5,                 
-        'learning_rate': 0.04,
+        'learning_rate': 0.008,
         'max_depth': 9,
         'subsample': 1,
         'min_child_weight': 4,
@@ -25,10 +25,13 @@ def xgb_model(cls, train_set, val_set):
         'seed': cls.seed,
         'n_estimators': 8000
     }
+    if cls.pseudo == 1:
+        params['learning_rate'] = 0.04
     params["objective"] = 'binary:logistic'
     params["eval_metric"] = "logloss"
-    cw = utils.class_weight.compute_class_weight('balanced', np.unique(train_set['y']), train_set['y'])
-    params['scale_pos_weight'] = cw[1] / cw[0]
+    # cw = utils.class_weight.compute_class_weight('balanced', np.unique(train_set['y']), train_set['y'])
+    # params['scale_pos_weight'] = cw[1] / cw[0]
+    params['scale_pos_weight'] = 20
 
     # modeling
     model = xgb.XGBClassifier(**params)
