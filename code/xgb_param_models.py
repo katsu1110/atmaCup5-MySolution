@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn import utils
 import xgboost as xgb
 import operator
 
@@ -13,8 +14,8 @@ def xgb_model(cls, train_set, val_set):
 
     # list is here: https://xgboost.readthedocs.io/en/latest/parameter.html
     params = {
-        'colsample_bytree': 0.56,                 
-        'learning_rate': 0.008,
+        'colsample_bytree': 0.5,                 
+        'learning_rate': 0.04,
         'max_depth': 9,
         'subsample': 1,
         'min_child_weight': 4,
@@ -26,7 +27,8 @@ def xgb_model(cls, train_set, val_set):
     }
     params["objective"] = 'binary:logistic'
     params["eval_metric"] = "logloss"
-    params['scale_pos_weight'] = 20
+    cw = utils.class_weight.compute_class_weight('balanced', np.unique(train_set['y']), train_set['y'])
+    params['scale_pos_weight'] = cw[1] / cw[0]
 
     # modeling
     model = xgb.XGBClassifier(**params)

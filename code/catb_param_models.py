@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn import utils
 from catboost import CatBoostRegressor, CatBoostClassifier
 
 def catb_model(cls, train_set, val_set):
@@ -12,16 +13,17 @@ def catb_model(cls, train_set, val_set):
 
     # list is here: https://catboost.ai/docs/concepts/python-reference_parameters-list.html
     params = { 'task_type': "CPU",
-                'learning_rate': 0.008, 
-                'iterations': 16000,
-                'colsample_bylevel': 0.44,
+                'learning_rate': 0.01, 
+                'iterations': 8000,
+                'colsample_bylevel': 0.5,
                 'random_seed': cls.seed,
                 'use_best_model': True,
                 'early_stopping_rounds': 80
                 }
     params["loss_function"] = "Logloss"
     params["eval_metric"] = "Logloss"
-    params['class_weights'] = [5, 100]
+    cw = utils.class_weight.compute_class_weight('balanced', np.unique(train_set['y']), train_set['y'])
+    params['class_weights'] = cw
 
     # modeling
     model = CatBoostClassifier(**params)

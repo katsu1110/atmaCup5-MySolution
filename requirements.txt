@@ -1,4 +1,4 @@
-lightgbm==2.3.0
+lightgbm==2.3.1
 xgboost==1.0.2
 catboost==0.23
 tensorflow==2.1.0

@@ -33,13 +33,13 @@ from run_models import RunModel
 
 ### parameters ###
 GBDT = sys.argv[1]
-PSEUDO = sys.argv[2]
+PSEUDO = int(sys.argv[2])
 UNDERSAMPLING_BAGGING = True
 GEOMEAN = True
 
-PSEUDO_THRESHOLD = 0.99
+PSEUDO_THRESHOLD = 0.95
 N_BAG = 10
-N_UNDER = 16
+N_UNDER = 9
 
 ### data location ###
 input_path = "../input/"
@@ -57,8 +57,8 @@ def read_data():
     cnn_tr = np.load(output_path + 'cnn_features_tr.npy')
     cnn_ts = np.load(output_path + 'cnn_features_ts.npy')
     for i in range(2):
-        train[f'cnn_pca{i+1}'] = cnn_tr[:train.shape[0], i]
-        test[f'cnn_pca{i+1}'] = cnn_ts[:train.shape[0], i]
+        train[f'cnn_pca{i+1}'] = cnn_tr[:train.shape[0], -2+i]
+        test[f'cnn_pca{i+1}'] = cnn_ts[:train.shape[0], -2+i]
     return train, test, submission
 train, test, sub = read_data()
 
@@ -96,6 +96,7 @@ features = ['grad3_max2min',
  'grad_argmin',
  'peak_pos',
  'num_peaks',
+ 'params3_to_posmedian',
  'grad_skew',
  'grad3_max',
  'params3',
@@ -106,8 +107,7 @@ features = ['grad3_max2min',
  'sig_max2min',
  'beta',
  'params6_to_posmean',
- 'params3_to_posmean',
- 'sig_peaknearsum',
+ 'params2_to_posmedian',
  'fft_umap1',
  'fft_50_100',
  'cnn_pca1', 'cnn_pca2'] # null importanceを元にエラバレシfeatures
@@ -167,14 +167,14 @@ print(metrics.classification_report(y_true=train['target'].values[:orig_trlen], 
 ### plot feature importance ###
 if PSEUDO == 0:
     fi_df = model.plot_feature_importance()
-    plt.savefig(f'feature_importance_{GBDT}.png', bbox_inches='tight')
+    plt.savefig(fig_path + f'feature_importance_{GBDT}.png', bbox_inches='tight')
     fi_df = fi_df[["features", "importance_mean"]].drop_duplicates().reset_index(drop=True)
     fi_df.to_csv(output_path + f'feature_importance_{GBDT}.csv', index=False)
 
 ### save ###
 sub["target"] = y_preds
-sub.to_csv(output_path + f'submission_{GBDT}.csv', index=False)
+sub.to_csv(output_path + f'submission_{GBDT}{PSEUDO}.csv', index=False)
 print("submitted!")
-np.save(output_path + f"oof_{GBDT}", oof)
-np.save(output_path + f"ypred_{GBDT}", y_preds)
+np.save(output_path + f"oof_{GBDT}{PSEUDO}", oof)
+np.save(output_path + f"ypred_{GBDT}{PSEUDO}", y_preds)
 print("saved!")

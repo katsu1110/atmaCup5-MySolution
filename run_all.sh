@@ -13,7 +13,7 @@ python run_gbdt.py 'xgb' 0
 python run_gbdt.py 'catb' 0
 
 # 中央値でアンサンブルします
-python ensemble.py
+python ensemble.py 0
 
 # GBDTを走らせます（↑を元にpseudolabel）
 python run_gbdt.py 'lgb' 1
@@ -21,5 +21,5 @@ python run_gbdt.py 'xgb' 1
 python run_gbdt.py 'catb' 1
 
 # 中央値でアンサンブルします
-python ensemble.py
+python ensemble.py 1
 

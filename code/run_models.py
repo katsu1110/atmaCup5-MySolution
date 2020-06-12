@@ -27,7 +27,7 @@ from catb_param_models import catb_model
 UNDERSAMPLING_BAGGING = True
 GEOMEAN = True
 N_BAG = 10
-N_UNDER = 16
+N_UNDER = 9
 
 class RunModel(object):
     """
@@ -159,6 +159,8 @@ class RunModel(object):
         oof_pred = np.zeros((self.train_df.shape[0], ))
         if GEOMEAN:
             y_pred = np.ones((self.test_df.shape[0], ))
+        else:
+            y_pred = np.zeros((self.test_df.shape[0], ))
 
         # group does not kick in when group k fold is used
         if self.group is not None:

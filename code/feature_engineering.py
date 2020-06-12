@@ -51,6 +51,11 @@ def parampos_features(train, test):
         me = train.loc[train['target'] == 1, f].mean()
         train[f'{f}_to_posmean'] = np.abs(train[f].values - me)
         test[f'{f}_to_posmean'] = np.abs(test[f].values - me)
+
+        # to median
+        me = train.loc[train['target'] == 1, f].median()
+        train[f'{f}_to_posmedian'] = np.abs(train[f].values - me)
+        test[f'{f}_to_posmedian'] = np.abs(test[f].values - me)
     return train, test
 train, test = parampos_features(train, test)
 
@@ -157,7 +162,7 @@ tr_psds, ts_psds = wave_normalizer(tr_psds, ts_psds)
 def add_emb(train_wave, test_wave, name="wave", method="umap"):
     # original signal
     if method == "umap":
-        em = umap.UMAP()
+        em = umap.UMAP(random_state=116)  # (added after the competition)
     elif method == "pca":
         em = decomposition.PCA(n_components=2)
     em.fit(train_wave)

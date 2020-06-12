@@ -30,12 +30,25 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 ```
 
 - atmaCup 5のデータをinputフォルダへ
-- ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med.csv```など結果が保存される）
+- ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med1.csv```など結果が保存される）
+
+## 注意
+最終subの結果は、
+
+```Public: 0.9235, Private:	0.8752```
+
+でしたが、
+
+- UMAP特徴量を作る際のseedを固定していなかった
+- Keras CNNの訓練時にseedを固定していなかった
+- 締め切りに間にあわせるため、pseudolabel後のGBDTの訓練だけXGBoost, CatBoostのlearning rateを上げて行なった
+
+ことにより、このrepositoryのコードを動かしても完全には上記のスコアには一致しません...ご留意ください（かなり近いスコアにはなるはずです）。
 
 ## 実行環境
-Anacondaに、
+Anaconda (https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh)に、
 
-- lightGBM (lightgbm==2.3.0)
+- lightGBM (lightgbm==2.3.1)
 - XGBoost (xgboost==1.0.2)
 - CatBoost (catboost==0.23)
 - Tensorflow (tensorflow==2.1.0)
@@ -182,7 +195,7 @@ kiwisolver==1.1.0
 lazy-object-proxy==1.4.3
 libarchive-c==2.8
 lief==0.9.0
-lightgbm==2.3.0
+lightgbm==2.3.1
 llvmlite==0.31.0
 locket==0.2.0
 lxml==4.5.0

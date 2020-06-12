@@ -17,6 +17,7 @@ from sklearn import decomposition
 from sklearn.model_selection import StratifiedKFold
 from sklearn import metrics
 import math
+import random
 
 import tensorflow_addons as tfa
 import tensorflow as tf
@@ -53,6 +54,14 @@ def read_data():
     return submission, tr_waves, ts_waves, y_train
 sub, X_train, X_test, y_train = read_data()
 orig_trlen = X_train.shape[0]
+
+## fix seed (added after the competition)
+def seed_everything(seed : int):    
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    tf.random.set_seed(seed)
+seed_everything(116)
 
 ## augmentation
 if FLIP:
@@ -102,17 +111,38 @@ def extra_dist(best_model, X_skf_train, X_skf_test):
     
     return train_dist, test_dist
 
+# enable mish
+class Mish(tf.keras.layers.Layer):
+
+    def __init__(self, **kwargs):
+        super(Mish, self).__init__(**kwargs)
+        self.supports_masking = True
+
+    def call(self, inputs):
+        return inputs * K.tanh(K.softplus(inputs))
+
+    def get_config(self):
+        base_config = super(Mish, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
+
+def mish(x):
+	return layers.Lambda(lambda x: x*K.tanh(K.softplus(x)))(x)
+
+utils.get_custom_objects().update({'mish': layers.Activation(mish)})
+
 ## 1D conv model
 params = {
         'n_filter': 16,
-        'filter_size': 5,
+        'filter_size': 4,
         'input_dropout': 0.0,
         'hidden_layers': 3,
         'hidden_units': 64,
         'embedding_out_dim': 4,
-        'hidden_activation': 'relu', 
+        'hidden_activation': 'mish', 
         'hidden_dropout': 0.04,
-        'gauss_noise': 0.01,
         'norm_type': 'batch', # layer
         'optimizer': {'type': 'adam', 'lr': 1e-4},
         'batch_size': 32,
@@ -132,7 +162,6 @@ def create_model(input_len, params):
     elif params['norm_type'] == 'layer':
         x = layers.LayerNormalization()(x)
     x = layers.Dropout(params["hidden_dropout"])(x)
-    x = layers.GaussianNoise(params['gauss_noise'])(x)
     
     x = layers.Conv1D(n_filter, filter_size, padding="same")(x)
     x = layers.Activation(params["hidden_activation"])(x)
@@ -141,7 +170,6 @@ def create_model(input_len, params):
     elif params['norm_type'] == 'layer':
         x = layers.LayerNormalization()(x)
     x = layers.Dropout(params["hidden_dropout"])(x)
-    x = layers.GaussianNoise(params['gauss_noise'])(x)
     
     x = layers.MaxPool1D()(x)
     
@@ -170,7 +198,7 @@ model.summary()
 
 ### Fitting ###
 k = 5
-skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=72)
+skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
 oof = np.zeros(X_train.shape[0])
 test_ = np.ones(X_test.shape[0])
 cv = 0
