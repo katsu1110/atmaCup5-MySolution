@@ -30,7 +30,7 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 ```
 
 - atmaCup 5のデータをinputフォルダへ
-- ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med1.csv```など結果が保存される）
+- ```run_all.sh```を実行（outputフォルダに、最終サブである```submission_med1.csv```などの結果が保存される）
 
 ## 注意
 最終subの結果は、
@@ -45,23 +45,6 @@ GBDTs (LightGBM, XGBoost, CatBoost)のmedian ensembleです。
 ことにより、このrepositoryのコードを動かしても完全には上記のスコアには一致しません...ご留意ください（近いスコアにはなるはずです）。
 
 ## 実行環境
-Anaconda (https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh)に、
-
-- lightGBM (lightgbm==2.3.1)
-- XGBoost (xgboost==1.0.2)
-- CatBoost (catboost==0.23)
-- Tensorflow (tensorflow==2.1.0)
-- tensorflow-addons (tensorflow-addons==0.9.1)
-- UMAP (umap-learn==0.4.4) 
-
-を追加して使っています。
-
-### python & conda version
-
-```
-Python 3.7.6
-conda 4.8.3
-```
 
 ### Docker
 
@@ -86,6 +69,25 @@ docker-compose up -d --build  # step3: image を build してコンテナ立ち�
 (base) root@0f8f3ab4a6a1:/analysis# python -V
 Python 3.7.6
 (base) root@0f8f3ab4a6a1:/analysis# conda -V
+conda 4.8.3
+```
+
+### Dockerを使わずに環境構築 （非推奨）
+Anaconda (https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh)に、
+
+- lightGBM (lightgbm==2.3.1)
+- XGBoost (xgboost==1.0.2)
+- CatBoost (catboost==0.23)
+- Tensorflow (tensorflow==2.1.0)
+- tensorflow-addons (tensorflow-addons==0.9.1)
+- UMAP (umap-learn==0.4.4) 
+
+を追加して使用します。
+
+### python & conda version
+
+```
+Python 3.7.6
 conda 4.8.3
 ```
 
