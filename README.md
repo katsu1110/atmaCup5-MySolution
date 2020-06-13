@@ -86,7 +86,7 @@ docker-compose up -d --build  # step3: image を build してコンテナ立ち�
 (base) root@0f8f3ab4a6a1:/analysis# python -V
 Python 3.7.6
 (base) root@0f8f3ab4a6a1:/analysis# conda -V
-conda 4.8.2
+conda 4.8.3
 ```
 
 ### modules
