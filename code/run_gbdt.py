@@ -44,7 +44,7 @@ N_UNDER = 16
 ### data location ###
 input_path = "../input/"
 output_path = "../output/"
-fig_path = "../figs/"
+# fig_path = "../figs/"
 
 ### load data ###
 def read_data():
@@ -164,12 +164,12 @@ lr_precision, lr_recall, _ = metrics.precision_recall_curve(train['target'].valu
 print(f"Overall PR-AUC = {prauc}, LogLoss = {ll}")
 print(metrics.classification_report(y_true=train['target'].values[:orig_trlen], y_pred=np.round(oof[:orig_trlen])))
 
-### plot feature importance ###
-if PSEUDO == 0:
-    fi_df = model.plot_feature_importance()
-    plt.savefig(fig_path + f'feature_importance_{GBDT}.png', bbox_inches='tight')
-    fi_df = fi_df[["features", "importance_mean"]].drop_duplicates().reset_index(drop=True)
-    fi_df.to_csv(output_path + f'feature_importance_{GBDT}.csv', index=False)
+# ### plot feature importance ###
+# if PSEUDO == 0:
+#     fi_df = model.plot_feature_importance()
+#     plt.savefig(fig_path + f'feature_importance_{GBDT}.png', bbox_inches='tight')
+#     fi_df = fi_df[["features", "importance_mean"]].drop_duplicates().reset_index(drop=True)
+#     fi_df.to_csv(output_path + f'feature_importance_{GBDT}.csv', index=False)
 
 ### save ###
 sub["target"] = y_preds
