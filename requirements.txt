@@ -1,6 +1,6 @@
 lightgbm==2.3.1
 xgboost==1.0.2
 catboost==0.23
-tensorflow==2.1.0
+tensorflow==2.6.4
 tensorflow-addons==0.9.1
 umap-learn==0.4.4
